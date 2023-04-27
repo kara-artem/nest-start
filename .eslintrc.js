@@ -40,5 +40,6 @@ module.exports = {
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': ['error'],
     '@typescript-eslint/explicit-member-accessibility': 'error',
+    'unused-imports/no-unused-imports-ts': 2,
   },
 };

@@ -114,5 +114,8 @@ sw.*
 # Vim swap files
 *.swp
 
+# Upload folder
 uploads
+
+# Media folder
 media
