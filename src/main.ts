@@ -1,25 +1,28 @@
-import { NestFactory, Reflector } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
+import { config } from './common/config';
 
 (async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  const config = new DocumentBuilder()
-    .setTitle('Swagger Content manager (Fidsty)')
-    .setDescription('The Content manager API routes')
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle(`Swagger ${config.get('PROJECT_NAME')}`)
+    .setDescription(`${config.get('PROJECT_NAME')} API routes`)
     .setVersion('1.0')
     .setExternalDoc('JSON version', `${process.env.HOST_URL}/docs-json`)
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
 
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(config.get<number>('PORT', 3000));
 })();
