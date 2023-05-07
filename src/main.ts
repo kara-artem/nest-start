@@ -6,9 +6,17 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { config } from './common/config';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const Fingerprint = require('express-fingerprint');
+
 (async (): Promise<void> => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.use(
+    Fingerprint({
+      parameters: [Fingerprint.useragent, Fingerprint.acceptHeaders, Fingerprint.geoip],
+    }),
+  );
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

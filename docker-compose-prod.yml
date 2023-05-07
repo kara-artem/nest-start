@@ -11,7 +11,7 @@ services:
       - '${DB_PORT:-5432}:5432'
     volumes:
       - dimas_cars_backend_pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: always
 
   redis:
     container_name: '${PROJECT_NAME}_redis'
@@ -20,7 +20,19 @@ services:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
       - dimas_cars_backend_redisdata:/data
-    restart: unless-stopped
+    restart: always
+
+  backend:
+    build:
+      context: .
+    ports:
+      - 3005:3000
+    volumes:
+      - ./upload:/usr/src/app/upload
+    depends_on:
+      - db
+      - redis
+    restart: always
 
 volumes:
   dimas_cars_backend_pgdata:
