@@ -1,16 +1,15 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, Index } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { BeforeInsert, BeforeUpdate, Column, Entity, Index, JoinColumn, OneToOne } from 'typeorm';
 
 import { BaseEntity } from '../../common/entities/base.entity';
+import { UploadEntity } from '../../upload/entities/upload.entity';
 import { UserRoleEnum } from '../enums/user.role.enum';
 import bcrypt = require('bcrypt');
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
   @Column({ type: 'varchar' })
-  firstName: string;
-
-  @Column({ type: 'varchar' })
-  lastName: string;
+  name: string;
 
   @Column({ select: false })
   password: string;
@@ -29,6 +28,18 @@ export class UserEntity extends BaseEntity {
     nullable: false,
   })
   role: UserRoleEnum;
+
+  @Exclude()
+  @Column({ type: 'uuid', nullable: true })
+  avatarId?: string | null;
+
+  @OneToOne(() => UploadEntity, {
+    onDelete: 'SET NULL',
+    eager: true,
+    nullable: true,
+  })
+  @JoinColumn()
+  avatar?: UploadEntity | null;
 
   @BeforeInsert()
   @BeforeUpdate()

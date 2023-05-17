@@ -52,7 +52,7 @@ export class UploadController {
     if (file) {
       return this.uploadService.addFile(file, user.id);
     }
-    throw new BadRequestException('Нет файла');
+    throw new BadRequestException('File is empty');
   }
 
   @Delete(':id')

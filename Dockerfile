@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18
 
 USER node
 COPY --chown=node:node package*.json /usr/src/app/

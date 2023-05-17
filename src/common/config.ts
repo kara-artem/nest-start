@@ -68,7 +68,6 @@ export class Config {
 
   getUploadOptions(): MulterOptions {
     return {
-      dest: '/tmp',
       limits: { fileSize: 50_000_000 }, // 50 Mb
     };
   }

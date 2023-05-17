@@ -1,27 +1,49 @@
 version: "3"
 services:
   db:
-    container_name: '${PROJECT_NAME}_db'
+    container_name: 'cars_db'
     image: postgres:14
     environment:
       POSTGRES_USER: '${DB_USERNAME}'
       POSTGRES_PASSWORD: '${DB_PASSWORD}'
       POSTGRES_DB: '${DB_NAME}'
+    networks:
+      - 'cars_internal'
     ports:
-      - '${DB_PORT:-5432}:5432'
+      - '${DB_PORT}:${DB_PORT}'
     volumes:
-      - dimas_cars_backend_pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
+      - cars_pgdata:/var/lib/postgresql/data
+    restart: always
 
   redis:
-    container_name: '${PROJECT_NAME}_redis'
+    container_name: 'cars_redis'
     image: redis:6
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    networks:
+      - 'cars_internal'
     volumes:
-      - dimas_cars_backend_redisdata:/data
-    restart: unless-stopped
+      - cars_redisdata:/data
+    restart: always
+
+  #not needed at local
+  backend:
+    container_name: 'cars_back'
+    build:
+      context: .
+    ports:
+      - '${PORT}:3000'
+    networks:
+      - 'cars_internal'
+    depends_on:
+      - db
+      - redis
+    restart: always
 
 volumes:
-  dimas_cars_backend_pgdata:
-  dimas_cars_backend_redisdata:
+  cars_pgdata:
+  cars_redisdata:
+
+networks:
+  cars_internal:
+    driver: bridge

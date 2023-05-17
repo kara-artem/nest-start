@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AllowUnauthorizedRequest } from '../common/decorators/allow.unauthorized.request';
@@ -8,6 +8,7 @@ import { ConfirmEmailDto } from './dto/confirm.email.dto';
 import { RegistrationDto } from './dto/registration.dto';
 import { ResetPasswordDto } from './dto/reset.password.dto';
 import { UpdatePasswordDto } from './dto/update.password.dto';
+import { UpdateProfileDto } from './dto/update.profile.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserPayloadInterface } from './interfaces/user.payload.interface';
 import { ConfirmService } from './services/confirm.service';
@@ -52,5 +53,14 @@ export class UserController {
   async updatePassword(@Body() dto: UpdatePasswordDto): Promise<boolean> {
     await this.confirmService.confirmPassword(dto.hash, dto.password);
     return true;
+  }
+
+  @Patch('profile')
+  @StatusCode(HttpStatus.OK)
+  async changeProfile(
+    @Body() data: UpdateProfileDto,
+    @UserPayload() user: UserPayloadInterface,
+  ): Promise<UserEntity | null> {
+    return this.userService.update(user.id, data);
   }
 }

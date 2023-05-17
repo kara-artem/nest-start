@@ -1,11 +1,20 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
+import { ResponseException } from '../../common/exceptions/response.exception';
 import { RegistrationDto } from '../dto/registration.dto';
 import { ResetPasswordDto } from '../dto/reset.password.dto';
+import { UpdateProfileDto } from '../dto/update.profile.dto';
 import { UserEntity } from '../entities/user.entity';
 import { EmailMessageType } from '../types/users.types';
 import { LetterService } from './letter.service';
@@ -123,5 +132,25 @@ export class UserService {
 
   async deleteUser(id: string): Promise<void> {
     await this.userRepo.delete({ id });
+  }
+
+  async update(id: string, dto: UpdateProfileDto): Promise<UserEntity | null> {
+    const user: UserEntity | null = await this.getById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    try {
+      await this.userRepo.save({
+        ...user,
+        ...dto,
+      });
+
+      return this.getById(id);
+    } catch (e) {
+      Logger.error(e, 'UserService.update');
+      throw new ResponseException(HttpStatus.BAD_REQUEST, e instanceof Error ? e.message : '');
+    }
   }
 }
