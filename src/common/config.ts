@@ -34,7 +34,7 @@ export class Config {
     return {
       type: 'postgres',
       host: this.get('DB_HOST'),
-      port: this.get('DB_PORT'),
+      port: this.get<number>('DB_PORT'),
       username: this.get('DB_USERNAME'),
       password: this.get('DB_PASSWORD'),
       database: this.get('DB_NAME'),

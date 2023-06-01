@@ -1,4 +1,5 @@
-import { CacheModule, Global, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Global, Module } from '@nestjs/common';
 import * as redisStore from 'cache-manager-redis-store';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

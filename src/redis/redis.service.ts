@@ -13,7 +13,7 @@ export class RedisService {
   }
 
   async set(key: string, value: unknown, ttl?: number): Promise<void> {
-    return this.$cacheManager.set(key, value, ttl);
+    await this.$cacheManager.set(key, value, { ttl });
   }
 
   async del(key: string): Promise<void> {

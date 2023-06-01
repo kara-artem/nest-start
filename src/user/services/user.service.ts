@@ -28,7 +28,7 @@ export class UserService {
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async deleteRemovedBotFeatures(): Promise<void> {
+  async deleteUnconfirmedUsers(): Promise<void> {
     try {
       await this.userRepo.delete({
         isEmailConfirmed: false,
@@ -81,6 +81,51 @@ export class UserService {
     return this.getById(user.id);
   }
 
+  async update(id: string, dto: UpdateProfileDto): Promise<UserEntity | null> {
+    const user: UserEntity | null = await this.getById(id);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    try {
+      await this.userRepo.save({
+        ...user,
+        ...dto,
+      });
+
+      return this.getById(id);
+    } catch (e) {
+      Logger.error(e, 'UserService.update');
+      throw new ResponseException(HttpStatus.BAD_REQUEST, e instanceof Error ? e.message : '');
+    }
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    await this.userRepo.delete({ id });
+  }
+
+  async saveEmail(email: string): Promise<boolean> {
+    const user: UserEntity | null = await this.getByEmail(email);
+    if (user) {
+      user.email = email;
+      user.isEmailConfirmed = true;
+      await this.userRepo.save(user);
+      return true;
+    }
+    throw new NotFoundException('User not found');
+  }
+
+  async savePassword(email: string, password: string): Promise<void> {
+    const user: UserEntity | null = await this.getByEmail(email);
+    if (user) {
+      user.password = password;
+      await this.userRepo.save(user);
+    } else {
+      throw new NotFoundException('User not found');
+    }
+  }
+
   async checkEmailAndSendConfirmLetter(email: string): Promise<void> {
     if (await this.checkExistEmail(email)) {
       const hash = await this.letterService.setHash({ email }, EmailMessageType.EMAIL);
@@ -106,51 +151,6 @@ export class UserService {
     } else {
       const hash = await this.letterService.setHash({ email: user.email }, messageType);
       await this.letterService.sendLetter(hash, dto.email, messageType);
-    }
-  }
-
-  async saveEmail(email: string): Promise<boolean> {
-    const user: UserEntity | null = await this.getByEmail(email);
-    if (user) {
-      user.email = email;
-      user.isEmailConfirmed = true;
-      await this.userRepo.save(user);
-      return true;
-    }
-    throw new NotFoundException('User not found');
-  }
-
-  async savePassword(email: string, password: string): Promise<void> {
-    const user: UserEntity | null = await this.getByEmail(email);
-    if (user) {
-      user.password = password;
-      await this.userRepo.save(user);
-    } else {
-      throw new NotFoundException('User not found');
-    }
-  }
-
-  async deleteUser(id: string): Promise<void> {
-    await this.userRepo.delete({ id });
-  }
-
-  async update(id: string, dto: UpdateProfileDto): Promise<UserEntity | null> {
-    const user: UserEntity | null = await this.getById(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    try {
-      await this.userRepo.save({
-        ...user,
-        ...dto,
-      });
-
-      return this.getById(id);
-    } catch (e) {
-      Logger.error(e, 'UserService.update');
-      throw new ResponseException(HttpStatus.BAD_REQUEST, e instanceof Error ? e.message : '');
     }
   }
 }

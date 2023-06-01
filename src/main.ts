@@ -25,7 +25,7 @@ const Fingerprint = require('express-fingerprint');
     .setTitle(`Swagger ${config.get('PROJECT_NAME')}`)
     .setDescription(`${config.get('PROJECT_NAME')} API routes`)
     .setVersion('1.0')
-    .setExternalDoc('JSON version', `${process.env.HOST_URL}/docs-json`)
+    .setExternalDoc('JSON version', `${config.get('HOST_URL')}/docs-json`)
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

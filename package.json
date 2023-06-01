@@ -19,9 +19,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "clear:cache": "rm -rf node_modules/.cache dist"
+    "clear:cache": "rm -rf node_modules dist"
   },
   "dependencies": {
+    "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^9.2.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.0",
@@ -32,11 +33,12 @@
     "@nestjs/typeorm": "^9.0.1",
     "aws-sdk": "^2.1368.0",
     "bcrypt": "^5.1.0",
-    "cache-manager": "^5.1.3",
+    "cache-manager": "^4.1.0",
     "cache-manager-redis-store": "^2.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "crypto": "^1.0.1",
+    "express-fingerprint": "^1.2.2",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
@@ -46,11 +48,12 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
     "swagger-ui-express": "^4.6.0",
-    "typeorm": "^0.3.10",
-    "express-fingerprint": "^1.2.2"
+    "typeorm": "^0.3.10"
   },
   "devDependencies": {
+    "@types/cache-manager": "^4.0.1",
     "@nestjs/cli": "^9.1.5",
+    "@nestjs/schedule": "^2.1.0",
     "@nestjs/schematics": "^9.0.3",
     "@nestjs/testing": "^9.2.0",
     "@types/bcrypt": "^5.0.0",
@@ -59,7 +62,6 @@
     "@types/jest": "29.2.3",
     "@types/multer": "^1.4.7",
     "@types/node": "^18.11.9",
-    "@nestjs/schedule": "^2.1.0",
     "@types/nodemailer": "^6.4.7",
     "@types/passport-jwt": "^3.0.8",
     "@types/redis": "^4.0.11",
