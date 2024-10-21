@@ -22,6 +22,8 @@
     "clear:cache": "rm -rf node_modules dist"
   },
   "dependencies": {
+    "@liaoliaots/nestjs-redis": "^9.0.5",
+    "ioredis": "^5.3.1",
     "@nestjs/cache-manager": "^1.0.0",
     "@nestjs/common": "^9.2.0",
     "@nestjs/config": "^2.2.0",
@@ -38,6 +40,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
     "crypto": "^1.0.1",
+    "env-var": "^7.5.0",
     "express-fingerprint": "^1.2.2",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
@@ -48,15 +51,16 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
     "swagger-ui-express": "^4.6.0",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.10",
+    "typeorm-extension": "^2.5.2"
   },
   "devDependencies": {
-    "@types/cache-manager": "^4.0.1",
     "@nestjs/cli": "^9.1.5",
     "@nestjs/schedule": "^2.1.0",
     "@nestjs/schematics": "^9.0.3",
     "@nestjs/testing": "^9.2.0",
     "@types/bcrypt": "^5.0.0",
+    "@types/cache-manager": "^4.0.1",
     "@types/cache-manager-redis-store": "^2.0.1",
     "@types/express": "^4.17.14",
     "@types/jest": "29.2.3",

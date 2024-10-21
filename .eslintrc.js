@@ -23,7 +23,6 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'error',
     'no-return-await': 'error',
     '@typescript-eslint/member-ordering': 'error',
     '@typescript-eslint/no-non-null-assertion': 'warn',
@@ -39,5 +38,7 @@ module.exports = {
     'prefer-arrow/prefer-arrow-functions': ['error'],
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': ['error'],
+    '@typescript-eslint/no-explicit-any': 'off',
+    'no-underscore-dangle': 'error',
   },
 };
