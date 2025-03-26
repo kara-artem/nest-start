@@ -35,10 +35,11 @@ module.exports = {
     'lines-around-comment': ['error'],
     'no-unused-vars': 'off',
     'object-curly-spacing': ['error', 'always'],
-    'prefer-arrow/prefer-arrow-functions': ['error'],
+    'prefer-arrow/prefer-arrow-functions': 'off',
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': ['error'],
     '@typescript-eslint/no-explicit-any': 'off',
     'no-underscore-dangle': 'error',
+    '@typescript-eslint/no-var-requires': 'off'
   },
 };
